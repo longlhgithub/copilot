@@ -666,10 +666,10 @@ namespace CoPilot
                             }
                         }
                         if (Settings.autoSummonSkeletonEnabled 
-                            && (DateTime.Now - lastAutoSummonSkeleton).TotalMilliseconds > 5000 
+                            && (DateTime.Now - lastAutoSummonSkeleton).TotalMilliseconds > 1000 
                             && !isCasting && !isAttacking 
                             && skill.Id == SkillInfo.raiseSkeleton.Id 
-                            && (GetMonsterWithin(600, MonsterRarity.Magic) > 0|| GetMonsterWithin(1000)>30)
+                            && (GetMonsterWithin(1000, MonsterRarity.Rare) > 0 || GetMonsterWithin(1000, MonsterRarity.Magic) > 5|| GetMonsterWithin(1000)>30)
                             )
                         {
 
@@ -682,7 +682,7 @@ namespace CoPilot
                             //    KeyPress(GetSkillInputKey(skill.SkillSlotIndex));
                             //    lastAutoSummonSkeleton = DateTime.Now;
                             //}
-                            if (summons.skeletons < maxSkeletons-3)
+                            if (summons.skeletons < maxSkeletons-5)
                             {
                                 KeyPress(GetSkillInputKey(skill.SkillSlotIndex));
                                
