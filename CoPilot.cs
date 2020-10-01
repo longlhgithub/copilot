@@ -203,7 +203,7 @@ namespace CoPilot
 
         public bool EntityHasCurse(Entity entity)
         {
-            if (entity.GetComponent<Life>().Buffs.Exists(x => 
+            if (entity.GetComponent<Life>().Buffs.Exists(x =>
             x.Name == SkillInfo.punishment.BuffName))
             {
                 return true;
@@ -360,7 +360,7 @@ namespace CoPilot
             //base.DrawSettings();
 
             // Draw Custom GUI
-            ImGuiDrawSettings.DrawImGuiSettings();            
+            ImGuiDrawSettings.DrawImGuiSettings();
         }
         public override void Render()
         {
@@ -378,7 +378,7 @@ namespace CoPilot
 
                     localPlayer = GameController.Game.IngameState.Data.LocalPlayer;
                     player = localPlayer.GetComponent<Life>();
-                    buffs = player.Buffs;
+                    buffs = player.Buffs;                    
                     isAttacking = localPlayer.GetComponent<Actor>().isAttacking;
                     isCasting = localPlayer.GetComponent<Actor>().Action.HasFlag(ActionFlags.UsingAbility);
                     isMoving = localPlayer.GetComponent<Actor>().isMoving;
@@ -393,7 +393,7 @@ namespace CoPilot
                     if (Settings.offeringsEnabled || Settings.autoZombieEnabled)
                         corpses = GameController.Entities.Where(x => x.IsValid && !x.IsHidden && x.IsHostile && x.IsDead && x.IsTargetable && x.GetComponent<Monster>() != null);
                     if (Settings.autoGolemEnabled) { }
-                        summons.UpdateSummons();
+                    summons.UpdateSummons();
 
                     //int volaCount = GameController.Entities.Where(x => x.Path.Contains("VolatileDeadCore")).Count();
                     //LogError("Vola: " + volaCount.ToString());
@@ -547,7 +547,7 @@ namespace CoPilot
                             try
                             {
                                 // Cooldown reset starts on Buff expire
-                                if (buffs.Exists(x => x.Name == SkillInfo.moltenShell.BuffName) || buffs.Exists(x => x.Name == SkillInfo.steelSkin.BuffName) || buffs.Exists(x => x.Name == SkillInfo.boneArmour.BuffName) 
+                                if (buffs.Exists(x => x.Name == SkillInfo.moltenShell.BuffName) || buffs.Exists(x => x.Name == SkillInfo.steelSkin.BuffName) || buffs.Exists(x => x.Name == SkillInfo.boneArmour.BuffName)
                                     || buffs.Exists(x => x.Name == SkillInfo.arcaneCloak.BuffName))
                                 {
                                     lastMoltenShell = DateTime.MaxValue;
@@ -603,12 +603,12 @@ namespace CoPilot
                             try
                             {
                                 if (Settings.autoGolemEnabled &&
-                                    (summons.chaosElemental < Settings.autoGolemChaosMax || 
-                                    summons.fireElemental < Settings.autoGolemFireMax || 
-                                    summons.iceElemental < Settings.autoGolemIceMax || 
-                                    summons.lightningGolem < Settings.autoGolemLightningMax || 
-                                    summons.rockGolem < Settings.autoGolemRockMax || 
-                                    summons.boneGolem < Settings.autoBoneMax || 
+                                    (summons.chaosElemental < Settings.autoGolemChaosMax ||
+                                    summons.fireElemental < Settings.autoGolemFireMax ||
+                                    summons.iceElemental < Settings.autoGolemIceMax ||
+                                    summons.lightningGolem < Settings.autoGolemLightningMax ||
+                                    summons.rockGolem < Settings.autoGolemRockMax ||
+                                    summons.boneGolem < Settings.autoBoneMax ||
                                     summons.dropBearUniqueSummoned < Settings.autoGolemDropBearMax)
                                     && (DateTime.Now - lastAutoGolem).TotalMilliseconds > 1200 && !isCasting && !isAttacking && GetMonsterWithin(Settings.autoGolemAvoidRange) == 0)
                                 {
@@ -658,18 +658,19 @@ namespace CoPilot
                                         lastAutoGolem = DateTime.Now;
                                     }
                                 }
-                               
+
                             }
                             catch (Exception e)
                             {
                                 LogError(e.ToString());
                             }
                         }
-                        if (Settings.autoSummonSkeletonEnabled 
-                            && (DateTime.Now - lastAutoSummonSkeleton).TotalMilliseconds > 1000 
-                            && !isCasting && !isAttacking 
-                            && skill.Id == SkillInfo.raiseSkeleton.Id 
-                            && (GetMonsterWithin(1000, MonsterRarity.Rare) > 0 || GetMonsterWithin(1000, MonsterRarity.Magic) > 5|| GetMonsterWithin(1000)>30)
+                        if (Settings.autoSummonSkeletonEnabled
+                            //&& (DateTime.Now - lastAutoSummonSkeleton).TotalMilliseconds > 1000
+                            && !isCasting && !isAttacking
+                            && skill.Id == SkillInfo.raiseSkeleton.Id
+                            && !buffs.Any(el=> el.Name == "flask_utility_sprint")
+                            && (GetMonsterWithin(1500, MonsterRarity.Rare) > 0 || GetMonsterWithin(1500, MonsterRarity.Magic) > 5 || GetMonsterWithin(1000) > 30)
                             )
                         {
 
@@ -682,10 +683,10 @@ namespace CoPilot
                             //    KeyPress(GetSkillInputKey(skill.SkillSlotIndex));
                             //    lastAutoSummonSkeleton = DateTime.Now;
                             //}
-                            if (summons.skeletons < maxSkeletons-5)
+                            if (summons.skeletons < maxSkeletons - 3)
                             {
                                 KeyPress(GetSkillInputKey(skill.SkillSlotIndex));
-                               
+
                             }
                             else
                             {
@@ -701,7 +702,7 @@ namespace CoPilot
                             {
                                 if ((DateTime.Now - lastVortex).TotalMilliseconds > Settings.vortexDelay.Value && skill.Id == SkillInfo.vortex.Id)
                                 {
-                                    if (GetMonsterWithin(Settings.vortexRange) >= 1 || (Settings.vortexFrostbolt && skills.Any(x => x.Id == SkillInfo.frostbolt.Id && x.SkillUseStage > 2) ))
+                                    if (GetMonsterWithin(Settings.vortexRange) >= 1 || (Settings.vortexFrostbolt && skills.Any(x => x.Id == SkillInfo.frostbolt.Id && x.SkillUseStage > 2)))
                                     {
                                         KeyPress(GetSkillInputKey(skill.SkillSlotIndex));
                                         lastVortex = DateTime.Now;
@@ -779,7 +780,7 @@ namespace CoPilot
                                 if (((!Settings.offeringsUseWhileCasting && !isCasting && !isAttacking) || Settings.offeringsUseWhileCasting) && (DateTime.Now - lastOfferings).TotalMilliseconds > 500 &&
                                     (skill.Id == SkillInfo.spiritOffering.Id || skill.Id == SkillInfo.boneOffering.Id || skill.Id == SkillInfo.fleshOffering.Id))
                                 {
-                                    if (GetMonsterWithin(Settings.offeringsTriggerRange) >= Settings.offeringsMinEnemys && !buffs.Exists(x => x.Name == "active_offering" ) && CountCorpsesAroundMouse(mouseAutoSnapRange) > 0)
+                                    if (GetMonsterWithin(Settings.offeringsTriggerRange) >= Settings.offeringsMinEnemys && !buffs.Exists(x => x.Name == "active_offering") && CountCorpsesAroundMouse(mouseAutoSnapRange) > 0)
                                     {
                                         KeyPress(GetSkillInputKey(skill.SkillSlotIndex));
                                         lastOfferings = DateTime.Now;
@@ -839,15 +840,15 @@ namespace CoPilot
                                     //LogError("Brand Active: " + activeBrands.ToString());
                                     //if (activeBrands >= Settings.brandRecallMinBrands)
                                     //{
-                                        if (GetMonsterWithin(Settings.brandRecallTriggerRange) >= Settings.brandRecallMinEnemys)
-                                        {
-                                            KeyPress(GetSkillInputKey(skill.SkillSlotIndex));
-                                            lastBrandRecall = DateTime.Now;
-                                        }
+                                    if (GetMonsterWithin(Settings.brandRecallTriggerRange) >= Settings.brandRecallMinEnemys)
+                                    {
+                                        KeyPress(GetSkillInputKey(skill.SkillSlotIndex));
+                                        lastBrandRecall = DateTime.Now;
+                                    }
                                     //}                                    
-                                }   
+                                }
                             }
-                        catch (Exception e)
+                            catch (Exception e)
                             {
                                 LogError(e.ToString());
                             }
@@ -865,7 +866,7 @@ namespace CoPilot
                                     {
                                         KeyPress(GetSkillInputKey(skill.SkillSlotIndex));
                                         lastTempestShield = DateTime.Now;
-                                    }                                   
+                                    }
                                 }
                             }
                             catch (Exception e)
@@ -880,7 +881,7 @@ namespace CoPilot
                         {
                             try
                             {
-                                if ((DateTime.Now - autoAttackUpdate).TotalMilliseconds > 50 && 
+                                if ((DateTime.Now - autoAttackUpdate).TotalMilliseconds > 50 &&
                                     (skill.Id == SkillInfo.cyclone.Id || skill.Id == SkillInfo.iceNova.Id || skill.Id == SkillInfo.flickerStrike.Id))
                                 {
                                     autoAttackUpdate = DateTime.Now;
@@ -926,7 +927,7 @@ namespace CoPilot
                                     {
                                         lastConvocation = DateTime.Now;
                                         KeyPress(GetSkillInputKey(skill.SkillSlotIndex));
-                                    }           
+                                    }
                                     else if (GetMonsterWithin(Settings.convocationMobRange) > 0 && (GetMinnionsWithin(Settings.convocationMinnionRange) / summons.minnions.Count) * 100 <= Settings.convocationMinnionPct)
                                     {
                                         lastConvocation = DateTime.Now;
