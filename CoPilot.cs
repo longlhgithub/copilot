@@ -47,6 +47,7 @@ namespace CoPilot
         private DateTime lastCustom = new DateTime();
         private DateTime lastOfferings = new DateTime();
         private DateTime lastAutoGolem = new DateTime();
+        private DateTime lastAutoSummonSkeleton = new DateTime();
         private DateTime lastBrandRecall = new DateTime();
         private DateTime lastTempestShield = new DateTime();
         private DateTime lastMirage = new DateTime();
@@ -657,10 +658,38 @@ namespace CoPilot
                                         lastAutoGolem = DateTime.Now;
                                     }
                                 }
+                               
                             }
                             catch (Exception e)
                             {
                                 LogError(e.ToString());
+                            }
+                        }
+                        if (Settings.autoSummonSkeletonEnabled 
+                            && (DateTime.Now - lastAutoSummonSkeleton).TotalMilliseconds > 5000 
+                            && !isCasting && !isAttacking 
+                            && skill.Id == SkillInfo.raiseSkeleton.Id 
+                            && (GetMonsterWithin(600, MonsterRarity.Magic) > 0|| GetMonsterWithin(1000)>30)
+                            )
+                        {
+
+                            skill.Stats.TryGetValue(GameStat.NumberOfSkeletonsAllowed, out int maxSkeletons);
+                            //var castTimes = Math.Ceiling((decimal)(maxSkeletons - summons.skeletons) / 2);
+                            //var cast = 0;
+                            //LogMsg($"MaxSkeletons: {maxSkeletons}, cur skeletons: {summons.skeletons}, Monsters: {GetMonsterWithin(1000)},castTimes: {castTimes}");
+                            //while (cast< castTimes)
+                            //{ 
+                            //    KeyPress(GetSkillInputKey(skill.SkillSlotIndex));
+                            //    lastAutoSummonSkeleton = DateTime.Now;
+                            //}
+                            if (summons.skeletons < maxSkeletons-3)
+                            {
+                                KeyPress(GetSkillInputKey(skill.SkillSlotIndex));
+                               
+                            }
+                            else
+                            {
+                                lastAutoSummonSkeleton = DateTime.Now;
                             }
                         }
                         #endregion

@@ -128,6 +128,7 @@ namespace CoPilot
         public RangeNode<int> autoGolemDropBearMax = new RangeNode<int>(0, 0, 15);
         public RangeNode<int> autoGolemAvoidRange = new RangeNode<int>(1000, 100, 2000);
         public ToggleNode autoZombieEnabled = new ToggleNode(false);
+        public ToggleNode autoSummonSkeletonEnabled = new ToggleNode(false);
 
 
         #endregion

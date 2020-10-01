@@ -19,6 +19,7 @@ namespace CoPilot
         internal int boneGolem;
         internal int dropBearUniqueSummoned;
         internal int zombies;
+        internal int skeletons;
         internal List<Entity> minnions = new List<Entity>();
 
         internal DateTime lastUpdate = DateTime.Now;
@@ -37,6 +38,7 @@ namespace CoPilot
             boneGolem = 0;
             dropBearUniqueSummoned = 0;
             zombies = 0;
+            skeletons = 0;
             minnions.Clear();
             foreach(var obj in CoPilot.instance.localPlayer.GetComponent<Actor>().DeployedObjects.Where(x => x != null && x.Entity != null && x.Entity.IsAlive))
             {
@@ -79,7 +81,12 @@ namespace CoPilot
                 {
                     zombies++;
                     minnions.Add(obj.Entity);
-                }                    
+                }
+                else if (obj.Entity.Path.Contains("RaisedSkeleton"))
+                {
+                    skeletons++;
+                    minnions.Add(obj.Entity);
+                }
             }
         }
 

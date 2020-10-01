@@ -37,6 +37,7 @@ namespace CoPilot
         internal static Skill cyclone = new Skill();
         internal static Skill iceNova = new Skill();
         internal static Skill raiseZombie = new Skill();
+        internal static Skill raiseSkeleton = new Skill();
         internal static Skill flickerStrike = new Skill();
         internal static Skill frostbolt = new Skill();
         internal static Skill convocation = new Skill();
@@ -212,6 +213,10 @@ namespace CoPilot
                 else if (skill.InternalName == "raise_zombie")
                 {
                     raiseZombie.Id = skill.Id;
+                }
+                else if (skill.InternalName == "summon_skeletons")
+                {
+                    raiseSkeleton.Id = skill.Id;
                 }
                 else if (skill.InternalName == "flicker_strike")
                 {
