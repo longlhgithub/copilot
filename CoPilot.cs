@@ -987,7 +987,11 @@ namespace CoPilot
                     {
                         try
                         {
-                            if (GCD() && (DateTime.Now - lastCustom).TotalMilliseconds > Settings.customCooldown.Value && GetMonsterWithin(Settings.customTriggerRange) >= Settings.customMinEnemys)
+                            if (GCD() && (DateTime.Now - lastCustom).TotalMilliseconds > Settings.customCooldown.Value 
+							&& (GetMonsterWithin(Settings.customTriggerRange) >= Settings.customMinEnemys
+							|| GetMonsterWithin(Settings.customTriggerRange, MonsterRarity.Magic)>5
+                            || GetMonsterWithin(Settings.customTriggerRange, MonsterRarity.Rare) > 0)
+							)
                             {
                                 if ((Math.Round(player.HPPercentage, 3) * 100 <= Settings.customHpPct.Value || player.MaxES > 0 && (Math.Round(player.ESPercentage, 3) * 100 < Settings.customEsPct.Value)))
                                 {
